@@ -24,10 +24,10 @@ jobs:
           
           scp -i private_key.pem -o StrictHostKeyChecking=no -r . $AZURE_USERNAME@$AZURE_HOST:/path/on/azure/machine/your/app
           ssh -i private_key.pem -o StrictHostKeyChecking=no $AZURE_USERNAME@$AZURE_HOST << EOF
-            cd /path/on/azure/machine/your/app 
+            cd /path/on/azure/machine/your/app  
             docker-compose down
             docker-compose up --build -d
-        EOF
+      
 
   
 
