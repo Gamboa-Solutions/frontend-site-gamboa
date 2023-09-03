@@ -1,4 +1,4 @@
-name: Deploy to Azure VM
+name: Azure CD
 
 on:
   push:
@@ -8,20 +8,20 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Teste
-        run: echo ${{ secrets.AZURE_SSH_PRIVATE_KEY }} ${{ secrets.AZURE_HOST }} ${{ secrets.AZURE_USERNAME }}
-      - name: Deploy to Azure VM
-        env:
-          AZURE_SSH_PRIVATE_KEY: ${{ secrets.AZURE_SSH_PRIVATE_KEY }}
-          AZURE_HOST: ${{ secrets.AZURE_HOST }}
-          AZURE_USERNAME: ${{ secrets.AZURE_USERNAME }}
+
+      - name: Set up SSH keys
         run: |
-          echo "$AZURE_SSH_PRIVATE_KEY" > private_key.pem
-          chmod 600 private_key.pem
-          ssh -i private_key.pem -o StrictHostKeyChecking=no $AZURE_USERNAME@$AZURE_HOST "cd /home/azureuser/ && git pull && docker-compose up -d"
-        shell: /usr/bin/bash -e {0}
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PEM }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan "${{ secrets.HOST }}" >> ~/.ssh/known_hosts
 
-
+      - name: Deploy to Azure
+        run: |
+          # Coloque aqui os comandos para implantar seu aplicativo no Azure usando as chaves SSH
+          # Por exemplo, você pode usar o Azure CLI com as chaves SSH configuradas
+          az webapp deployment source config --name SitesInternos --resource-group Solucao-Sites --repo-url git@${{ secrets.HOST }}:Gamboa-Solutions/frontend-site-gamboa.git --branch main --manual-integration
