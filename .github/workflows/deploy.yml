@@ -1,4 +1,4 @@
-name: Pull All Remote Branches
+name: Pull Main Branch
 
 on:
   push:
@@ -6,21 +6,13 @@ on:
       - main
 
 jobs:
-  update_branches:
+  auto_pull:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Fetch all branches
+      - name: Pull latest changes from main
         run: |
-          git fetch --all
-
-      - name: Pull updates for each branch
-        run: |
-          for branch in $(git branch -r | grep -v HEAD); do
-              name="${branch#origin/}"
-              git checkout $name
-              git pull origin $name
-          done
+          git pull origin main
 
