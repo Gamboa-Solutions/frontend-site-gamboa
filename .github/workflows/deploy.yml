@@ -19,17 +19,15 @@ jobs:
           AZURE_HOST: ${{ secrets.AZURE_HOST }}
           AZURE_USERNAME: ${{ secrets.AZURE_USERNAME }}
         run: |
-          echo "$AZURE_SSH_PRIVATE_KEY" > private_key.pem
-          chmod 600 private_key.pem
+          ssh -i $AZURE_SSH_PRIVATE_KEY $AZURE_USERNAME@$AZURE_HOST "cd /home/azureuser/ && git pull && docker-compose up -d"
+
           
-          scp -i private_key.pem -o StrictHostKeyChecking=no -r . $AZURE_USERNAME@$AZURE_HOST:/path/on/azure/machine/your/app
-          ssh -i private_key.pem -o StrictHostKeyChecking=no $AZURE_USERNAME@$AZURE_HOST << EOF
-            cd /path/on/azure/machine/your/app  
-            docker-compose down
-            docker-compose up --build -d
+          
+          
+          
       
 
-  
+   
 
   
 
