@@ -15,13 +15,10 @@ jobs:
 
       - name: Deploy to Azure VM
         env:
-        AZURE_SSH_PRIVATE_KEY: ${{ secrets.AZURE_SSH_PRIVATE_KEY }}
-        AZURE_HOST: ${{ secrets.AZURE_HOST }}
-        AZURE_USERNAME: ${{ secrets.AZURE_USERNAME }}
-
-        run:
-          ssh -i private_key.pem $AZURE_USERNAME@$AZURE_HOST "cd /home/azureuser/ && git pull && docker-compose up -d"
-        shell: /usr/bin/bash -e {0}
-
-
-
+          AZURE_SSH_PRIVATE_KEY: ${{ secrets.AZURE_SSH_PRIVATE_KEY }}
+          AZURE_HOST: ${{ secrets.AZURE_HOST }}
+          AZURE_USERNAME: ${{ secrets.AZURE_USERNAME }}
+        run: |
+          echo "$AZURE_SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $AZURE_USERNAME@$AZURE_HOST "cd /home/azureuser/ && git pull && docker-compose up -d"
