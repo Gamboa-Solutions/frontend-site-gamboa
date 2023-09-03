@@ -17,7 +17,7 @@ jobs:
         run: |
           echo "$AZURE_SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
-          ssh -i private_key.pem -o StrictHostKeyChecking=no $AZURE_USERNAME@$AZURE_HOST "cd /home/azureuser/ && git pull && docker-compose up -d"
+          ssh -i private_key.pem $AZURE_USERNAME@$AZURE_HOST "cd /home/azureuser/ && git pull && docker-compose up -d"
         shell: /usr/bin/bash -e {0}
         env:
           AZURE_SSH_PRIVATE_KEY: ${{ secrets.AZURE_SSH_PRIVATE_KEY }}
