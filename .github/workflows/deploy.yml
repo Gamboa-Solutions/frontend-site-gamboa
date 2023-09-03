@@ -11,7 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+      - name: Teste
+        run: echo ${{ secrets.AZURE_SSH_PRIVATE_KEY }} ${{ secrets.AZURE_HOST }} ${{ secrets.AZURE_USERNAME }}
       - name: Deploy to Azure VM
         env:
           AZURE_SSH_PRIVATE_KEY: ${{ secrets.AZURE_SSH_PRIVATE_KEY }}
@@ -22,6 +23,5 @@ jobs:
           chmod 600 private_key.pem
           ssh -i private_key.pem -o StrictHostKeyChecking=no $AZURE_USERNAME@$AZURE_HOST "cd /home/azureuser/ && git pull && docker-compose up -d"
         shell: /usr/bin/bash -e {0}
-      - name: Teste
-        run: echo ${{ secrets.AZURE_SSH_PRIVATE_KEY }} ${{ secrets.AZURE_HOST }} ${{ secrets.AZURE_USERNAME }}
+
 
