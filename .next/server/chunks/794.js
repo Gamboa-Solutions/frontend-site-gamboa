@@ -306,7 +306,12 @@ function urlToUrlWithoutFlightMarker(url) {
     const urlWithoutFlightParameters = new URL(url, location.origin);
     urlWithoutFlightParameters.searchParams.delete(_approuterheaders.NEXT_RSC_UNION_QUERY);
     if (true) {
-        if (false) {}
+        if ( true && urlWithoutFlightParameters.pathname.endsWith(".txt")) {
+            const { pathname } = urlWithoutFlightParameters;
+            const length = pathname.endsWith("/index.txt") ? 10 : 4;
+            // Slice off `/index.txt` or `.txt` from the end of the pathname
+            urlWithoutFlightParameters.pathname = pathname.slice(0, -length);
+        }
     }
     return urlWithoutFlightParameters;
 }
@@ -2584,7 +2589,13 @@ async function fetchServerResponse(url, flightRouterState, nextUrl, currentBuild
     try {
         let fetchUrl = new URL(url);
         if (true) {
-            if (false) {}
+            if (true) {
+                if (fetchUrl.pathname.endsWith("/")) {
+                    fetchUrl.pathname += "index.txt";
+                } else {
+                    fetchUrl.pathname += ".txt";
+                }
+            }
         }
         // Add unique cache query to avoid caching conflicts on CDN which don't respect to Vary header
         fetchUrl.searchParams.set(_approuterheaders.NEXT_RSC_UNION_QUERY, uniqueCacheQuery);
@@ -2598,7 +2609,11 @@ async function fetchServerResponse(url, flightRouterState, nextUrl, currentBuild
         const contentType = res.headers.get("content-type") || "";
         let isFlightResponse = contentType === _approuterheaders.RSC_CONTENT_TYPE_HEADER;
         if (true) {
-            if (false) {}
+            if (true) {
+                if (!isFlightResponse) {
+                    isFlightResponse = contentType.startsWith("text/plain");
+                }
+            }
         }
         // If fetch returns something different than flight response handle it like a mpa navigation
         // If the fetch was not 200, we also handle it like a mpa navigation
@@ -5086,7 +5101,7 @@ const createProxy = _serveredge.createClientModuleProxy; //# sourceMappingURL=mo
 
 /***/ }),
 
-/***/ 4663:
+/***/ 8225:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -7816,7 +7831,7 @@ _export(exports, {
         return NotFoundBoundary;
     }
 });
-const { default: AppRouter } = __webpack_require__(4663);
+const { default: AppRouter } = __webpack_require__(8225);
 const { default: LayoutRouter } = __webpack_require__(7149);
 const { default: RenderFromTemplateContext } = __webpack_require__(9278);
 const { staticGenerationAsyncStorage } = __webpack_require__(3539);
