@@ -23,11 +23,11 @@ jobs:
       - name: Deploy to Hostinger
         env:
           DEPLOY_KEY: ${{ secrets.HOSTINGER }}
-          HOST: ${{ vars.HOST }}
-          PORT: ${{ vars.PORT }}
-          USER: ${{ vars.USER }}
-          TARGET_DIR: out
-          PASSWORD: ${{ vars.PASSWORD }}
+          HOST: ${{ secrets.HOST }}
+          PORT: ${{ secrets.PORT }}
+          USER: ${{ secrets.USER }}
+          TARGET_DIR: ${{ secrets.TARGET }}
+          PASSWORD: ${{ secrets.PASSWORD }}
         run: |
           sudo apt-get install -y sshpass
           rsync -avz -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" --delete ./out/ $USER@$HOST:./$TARGET_DIR
