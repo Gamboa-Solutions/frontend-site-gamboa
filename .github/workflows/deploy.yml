@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main  # Ou a branch que você deseja fazer deploy
+      -
+    workflows_dispatch:
 
 jobs:
   build_and_deploy:
