@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
         name: prod
-        url: https://gamboasolutions.com.br
-    needs: build
 
     steps:
       - name: Checkout code
