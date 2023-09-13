@@ -1,0 +1,31 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main  # Ou a branch que você deseja fazer deploy
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to Hostinger
+        env:
+          DEPLOY_KEY: ${{ secrets.HOSTINGER }}
+          HOST: u646976785@154.56.48.114
+          USER: 65002
+          TARGET_DIR: out
+        run: |
+          echo "65002 u646976785@154.56.48.114" > deploy_key
+          chmod 600 deploy_key
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i deploy_key" --delete ./out/ $USER@$HOST:./$TARGET_DIR
+          rm -f deploy_key
