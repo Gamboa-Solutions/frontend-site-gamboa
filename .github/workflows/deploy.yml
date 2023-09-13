@@ -21,8 +21,8 @@ jobs:
       - name: Deploy to Hostinger
         env:
           DEPLOY_KEY: ${{ secrets.HOSTINGER }}
-          HOST: u646976785@154.56.48.114
-          USER: 65002
+          HOST: 154.56.48.114
+          USER: 65002 u646976785
           TARGET_DIR: out
         run: |
           echo "65002 u646976785@154.56.48.114" > deploy_key
