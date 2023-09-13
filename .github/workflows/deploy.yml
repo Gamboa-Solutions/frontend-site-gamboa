@@ -1,26 +1,33 @@
-name: Deploy to Hostinger
+name: Deploy Angular/Ionic App to Hostinger
 
 on:
   push:
     branches:
-      - main  # Ou a branch que você deseja fazer deploy
-      -
-    workflows_dispatch:
+      - main  # A branch que você deseja fazer deploy
+  workflow_dispatch:  # Isso permite que você inicie o workflow manualmente no GitHub
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     environment:
-        name: prod
+      name: prod
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install and Build
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14  # Você pode especificar a versão do Node.js que você precisa aqui
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Ionic App
         run: |
-          npm ci
-          npm run build
+          npm install -g ionic
+          ionic build --prod
 
       - name: Deploy to Hostinger
         env:
@@ -32,4 +39,4 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
         run: |
           sudo apt-get install -y sshpass
-          rsync -avz -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" --delete ./out/ $USER@$HOST:./$TARGET_DIR
+          rsync -avz -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" --delete ./www/ $USER@$HOST:./$TARGET_DIR

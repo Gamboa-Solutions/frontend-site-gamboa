@@ -1,0 +1,7 @@
+{
+  "name": "frontend-site-gamboa",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
