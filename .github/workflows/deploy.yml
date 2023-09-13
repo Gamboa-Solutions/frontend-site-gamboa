@@ -22,10 +22,11 @@ jobs:
         env:
           DEPLOY_KEY: ${{ secrets.HOSTINGER }}
           HOST: 154.56.48.114
-          USER: 65002 u646976785
+          PORT: 65002
+          USER: u646976785
           TARGET_DIR: out
         run: |
-          echo "65002 u646976785@154.56.48.114" > deploy_key
+          echo "$DEPLOY_KEY" > deploy_key
           chmod 600 deploy_key
-          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i deploy_key" --delete ./out/ $USER@$HOST:./$TARGET_DIR
+          rsync -avz -e "ssh -p $PORT -o StrictHostKeyChecking=no -i deploy_key" --delete ./out/ $USER@$HOST:./$TARGET_DIR
           rm -f deploy_key
