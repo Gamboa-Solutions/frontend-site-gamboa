@@ -25,8 +25,7 @@ jobs:
           PORT: 65002
           USER: u646976785
           TARGET_DIR: out
+          PASSWORD: Per&ike23
         run: |
-          echo "$DEPLOY_KEY" > deploy_key
-          chmod 600 deploy_key
-          rsync -avz -e "ssh -p $PORT -o StrictHostKeyChecking=no -i deploy_key" --delete ./out/ $USER@$HOST:./$TARGET_DIR
-          rm -f deploy_key
+          sudo apt-get install -y sshpass
+          rsync -avz -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" --delete ./out/ $USER@$HOST:./$TARGET_DIR
