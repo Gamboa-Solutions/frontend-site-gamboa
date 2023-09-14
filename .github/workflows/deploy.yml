@@ -31,12 +31,12 @@ jobs:
 
       - name: Deploy to Hostinger
         env:
-          DEPLOY_KEY: ${{ secrets.HOSTINGER }}
-          HOST: ${{ secrets.HOST }}
-          PORT: ${{ secrets.PORT }}
-          USER: ${{ secrets.USER }}
-          TARGET_DIR: ${{ secrets.TARGET }}
-          PASSWORD: ${{ secrets.PASSWORD }}
+          DEPLOY_KEY: ${{ secrets.HOSTINGER_GAMBOA }}
+          HOST: ${{ secrets.HOST_GAMBOA }}
+          PORT: ${{ secrets.PORT_GAMBOA }}
+          USER: ${{ secrets.USER_GAMBOA }}
+          TARGET_DIR: ${{ secrets.TARGET_DIR_GAMBOA }}
+          PASSWORD: ${{ secrets.PASSWORD_GAMBOA }}
         run: |
           sudo apt-get install -y sshpass
           rsync -avz -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" --delete ./www/ $USER@$HOST:./$TARGET_DIR
