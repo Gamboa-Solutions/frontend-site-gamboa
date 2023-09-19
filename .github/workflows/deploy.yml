@@ -31,7 +31,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           KEY: ${{ secrets.KEY }}
-          SOURCE: "dist/"
+
           REMOTE_HOST: ${{ secrets.HOST_DEV }}
           REMOTE_USER: ${{ secrets.USER_DEV }}
           TARGET: ${{ secrets.TARGET_DEV }}
@@ -49,8 +49,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           KEY: ${{ secrets.KEY }}
-          ARGS: "-rlgoDzvO --delete"
-          SOURCE: "dist/"
+
           REMOTE_HOST: ${{ secrets.HOST_STAGE }}
           REMOTE_USER: ${{ secrets.USER_STAGE }}
           TARGET: ${{ secrets.TARGET_STAGE }}
@@ -68,7 +67,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           KEY: ${{ secrets.KEY }}
-          SOURCE: "dist/"
+
           REMOTE_HOST: ${{ secrets.HOST_PROD }}
           REMOTE_USER: ${{ secrets.USER_PROD }}  # fixed missing closing }}
           TARGET: ${{ secrets.TARGET_PROD }}
