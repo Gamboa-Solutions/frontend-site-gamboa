@@ -7,42 +7,78 @@ on:
       - stage
       - dev
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  workflow_dispatch:
 
-    env:
-      ENVIRONMENT: ${{ github.ref_name }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set environment specific vars
-        run: |
-          if [[ "${{ env.ENVIRONMENT }}" == "main" ]]; then
-            echo "HOST=$(echo ${{ secrets.HOST_PROD }})" >> $GITHUB_ENV
-            echo "PORT=$(echo ${{ secrets.PORT_PROD }})" >> $GITHUB_ENV
-            echo "USER=$(echo ${{ secrets.USER_PROD }})" >> $GITHUB_ENV
-            echo "TARGET_DIR=$(echo ${{ secrets.TARGET_PROD }})" >> $GITHUB_ENV
-            echo "PASSWORD=$(echo ${{ secrets.PASSWORD_PROD }})" >> $GITHUB_ENV
-            # ... Set other env variables for production
-          elif [[ "${{ env.ENVIRONMENT }}" == "stage" ]]; then
-            echo "HOST=$(echo ${{ secrets.HOST_STAGE }})" >> $GITHUB_ENV
-            echo "PORT=$(echo ${{ secrets.PORT_STAGE }})" >> $GITHUB_ENV
-            # ... Set other env variables for staging
-          elif [[ "${{ env.ENVIRONMENT }}" == "dev" ]]; then
-            echo "HOST=$(echo ${{ secrets.HOST_DEV }})" >> $GITHUB_ENV
-            echo "PORT=$(echo ${{ secrets.PORT_DEV }})" >> $GITHUB_ENV
-            # ... Set other env variables for development
-          fi
-
       - name: Build Vite React App
         run: |
           npm install
           npm run build
+  deploy-development:
+    runs-on: ubuntu-latest
+    environment:
+        name: deploy-development
+        url: ${{ secrets.URL_DEV }}
+    nedds: [build]
+    steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+      - name: Hostinger Deployment
+        uses: appleboy/ssh-action@master
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+          ARGS: "-rlgoDzvO --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: ${{ secrets.HOST_DEV }}
+          REMOTE_USER: ${{ secrets.USER_DEV }}
+          TARGET: ${{ secrets.TARGET_DEV }}
+          PORT: ${{ secrets.PORT_DEV }}
 
-      - name: Deploy
-        run: |
-          sudo apt-get install -y sshpass
-          rsync -avz -e "sshpass -p ${{ env.PASSWORD }} ssh -p ${{ env.PORT }} -o StrictHostKeyChecking=no" --delete ./dist/ ${{ env.USER }}@${{ env.HOST }}:./${{ env.TARGET_DIR }}
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment:
+      name: deploy-staging
+      url: ${{ secrets.URL_STAGE }}
+    nedds: development
+    steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+      - name: Hostinger Deployment
+        uses: appleboy/ssh-action@master
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+          ARGS: "-rlgoDzvO --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: ${{ secrets.HOST_STAGE }}
+          REMOTE_USER: ${{ secrets.USER_STAGE }}
+          TARGET: ${{ secrets.TARGET_STAGE }}
+          PORT: ${{ secrets.PORT_STAGE }}
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    environment:
+      name: deploy-production
+      url: ${{ secrets.URL_PROD }}
+    nedds: staging
+    steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+      - name: Hostinger Deployment
+        uses: appleboy/ssh-action@master
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+          ARGS: "-rlgoDzvO --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: ${{ secrets.HOST_PROD }}
+          REMOTE_USER: ${{ secrets.USER_PROD
+          TARGET: ${{ secrets.TARGET_PROD }}
+          PORT: ${{ secrets.PORT_PROD }}
+
