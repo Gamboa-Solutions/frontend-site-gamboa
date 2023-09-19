@@ -1,34 +1,29 @@
-name: Deploy via SSH
+name: Deploy React App to Hostinger
 
 on:
   push:
     branches:
-      - main # Ou a branch que você quer que acione o deploy
+      - main  # adjust with the name of your main branch if different
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Test SSH Connection
-        env:
-          HOST: ${{ secrets.HOST_PROD }}
-          USER: ${{ secrets.USER_PROD }}
-          PORT: ${{ secrets.PORT_PROD }}
-          PASSWORD: ${{ secrets.PASSWORD_PROD }}
+      - name: Install dependencies and build
         run: |
-          ssh -v -p $PASSWORD "${PORT}"  "${USER}@${HOST}"  "echo Connected"
+          npm install
+          npm run build
 
-      - name: Deploy to server
+      - name: Deploy to Hostinger
         env:
           HOST: ${{ secrets.HOST_PROD }}
-          USER: ${{ secrets.USER_PROD }}
-          TARGET_DIR: ${{ secrets.TARGET_PROD }}
-          PORT: ${{ secrets.PORT_PROD }}
-          PASSWORD: ${{ secrets.PASSWORD_PROD }} # Adicione essa secret com a senha SSH no GitHub Secrets
+          USERNAME: ${{ secrets.USER_PROD }}
+          PASSWORD: ${{ secrets.PASSWORD_PROD }}
+          PORT: ${{ secrets.PORT_PROD }} # Optional: If you use a custom port for SSH
         run: |
           sudo apt-get install -y sshpass
-          rsync -avz -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" --delete ./dist/ $USER@$HOST:./$TARGET_DIR
+          rsync -avz --delete -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" ./dist/ $USERNAME@$HOST:/path/to/your/public_html/
