@@ -1,39 +1,48 @@
-name: Deploy to Hostinger
+name: Deploy Vite React App
 
 on:
   push:
     branches:
-      - main   # produção
-      - stage  # ambiente de stage
-      - dev    # ambiente de desenvolvimento
+      - main
+      - stage
+      - dev
 
 jobs:
-  build_and_deploy:
+  deploy:
     runs-on: ubuntu-latest
 
-    # Set environment based on the branch
     env:
-      ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'prod' || github.ref == 'refs/heads/stage' && 'stage' || github.ref == 'refs/heads/dev' && 'dev' }}
+      ENVIRONMENT: ${{ github.ref_name }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install and Build
+      - name: Set environment specific vars
         run: |
-          npm ci
+          if [[ "${{ env.ENVIRONMENT }}" == "main" ]]; then
+            echo "HOST=$(echo ${{ secrets.HOST_PROD }})" >> $GITHUB_ENV
+            echo "PORT=$(echo ${{ secrets.PORT_PROD }})" >> $GITHUB_ENV
+            # ... Set other env variables for production
+          elif [[ "${{ env.ENVIRONMENT }}" == "stage" ]]; then
+            echo "HOST=$(echo ${{ secrets.HOST_STAGE }})" >> $GITHUB_ENV
+            echo "PORT=$(echo ${{ secrets.PORT_STAGE }})" >> $GITHUB_ENV
+            # ... Set other env variables for staging
+          elif [[ "${{ env.ENVIRONMENT }}" == "dev" ]]; then
+            echo "HOST=$(echo ${{ secrets.HOST_DEV }})" >> $GITHUB_ENV
+            echo "PORT=$(echo ${{ secrets.PORT_DEV }})" >> $GITHUB_ENV
+            # ... Set other env variables for development
+          fi
+
+      - name: Build Vite React App
+        run: |
+          # Your build steps here
+          npm install
           npm run build
 
-      - name: Deploy to Hostinger
-        env:
-          DEPLOY_KEY: ${{ secrets.HOSTINGER }}
-          HOST: ${{ secrets['HOST_' + env.ENVIRONMENT] }}
-          PORT: ${{ secrets['PORT_' + env.ENVIRONMENT] }}
-          USER: ${{ secrets['USER_' + env.ENVIRONMENT] }}
-          TARGET_DIR: ${{ secrets['TARGET_' + env.ENVIRONMENT] }}
-          PASSWORD: ${{ secrets['PASSWORD_' + env.ENVIRONMENT] }}
+      - name: Deploy
         run: |
           sudo apt-get install -y sshpass
-          rsync -avz -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" --delete ./dist/ $USER@$HOST:$TARGET_DIR/
-
-
+          rsync -avz -e "sshpass -p $PASSWORD ssh -p ${{ env.PORT }} -o StrictHostKeyChecking=no" --delete ./dist/ ${{ env.USER }}@${{ env.HOST }}:./$TARGET_DIR
+        env:
+          PASSWORD: ${{ secrets.SOME_PASSWORD }}
