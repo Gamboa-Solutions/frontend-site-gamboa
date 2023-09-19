@@ -15,12 +15,12 @@ jobs:
 
       - name: Test SSH Connection
         env:
-          HOST: 62.72.62.10
-          USER: u792725624
-          PORT: 65002
-
+          HOST: ${{ secrets.HOST_PROD }}
+          USER: ${{ secrets.USER_PROD }}
+          PORT: ${{ secrets.PORT_PROD }}
+          PASSWORD: ${{ secrets.PASSWORD_PROD }}
         run: |
-          ssh -p "${PORT}" "${USER}@${HOST}"  "echo Connected"
+          ssh -v -p $PASSWORD "${PORT}"  "${USER}@${HOST}"  "echo Connected"
 
       - name: Deploy to server
         env:
