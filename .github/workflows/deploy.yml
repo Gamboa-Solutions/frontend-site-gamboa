@@ -23,6 +23,9 @@ jobs:
           if [[ "${{ env.ENVIRONMENT }}" == "main" ]]; then
             echo "HOST=$(echo ${{ secrets.HOST_PROD }})" >> $GITHUB_ENV
             echo "PORT=$(echo ${{ secrets.PORT_PROD }})" >> $GITHUB_ENV
+            echo "USER=$(echo ${{ secrets.USER_PROD }})" >> $GITHUB_ENV
+            echo "TARGET_DIR=$(echo ${{ secrets.TARGET_PROD }})" >> $GITHUB_ENV
+            echo "PASSWORD=$(echo ${{ secrets.PASSWORD_PROD }})" >> $GITHUB_ENV
             # ... Set other env variables for production
           elif [[ "${{ env.ENVIRONMENT }}" == "stage" ]]; then
             echo "HOST=$(echo ${{ secrets.HOST_STAGE }})" >> $GITHUB_ENV
@@ -36,18 +39,10 @@ jobs:
 
       - name: Build Vite React App
         run: |
-          # Your build steps here
           npm install
           npm run build
 
       - name: Deploy
-        env:
-          DEPLOY_KEY: ${{ secrets.HOSTINGER }}
-          HOST: ${{ secrets.HOST_PROD }}
-          PORT: ${{ secrets.PORT_PROD }}
-          USER: ${{ secrets.USER_PROD }}
-          TARGET_DIR: ${{ secrets.TARGET_PROD }}
-          PASSWORD: ${{ secrets.PASSWORD_PROD }}
         run: |
           sudo apt-get install -y sshpass
-          rsync -avz -e "sshpass -p $PASSWORD ssh -p ${{ env.PORT }} -o StrictHostKeyChecking=no" --delete ./dist/ ${{ env.USER }}@${{ env.HOST }}:./$TARGET_DIR
+          rsync -avz -e "sshpass -p ${{ env.PASSWORD }} ssh -p ${{ env.PORT }} -o StrictHostKeyChecking=no" --delete ./dist/ ${{ env.USER }}@${{ env.HOST }}:./${{ env.TARGET_DIR }}
