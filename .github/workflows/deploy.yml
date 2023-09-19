@@ -30,13 +30,14 @@ jobs:
       - name: Hostinger Deployment
         uses: appleboy/ssh-action@master
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
-          ARGS: "-rlgoDzvO --delete"
+          KEY: ${{ secrets.KEY }}
           SOURCE: "dist/"
           REMOTE_HOST: ${{ secrets.HOST_DEV }}
           REMOTE_USER: ${{ secrets.USER_DEV }}
           TARGET: ${{ secrets.TARGET_DEV }}
           PORT: ${{ secrets.PORT_DEV }}
+          script: |
+            rsync -rlgoDzvO --delete dist/ ${username}@${host}:${{ secrets.TARGET_DEV }}
 
   deploy-staging:
     runs-on: ubuntu-latest
@@ -47,7 +48,7 @@ jobs:
       - name: Hostinger Deployment
         uses: appleboy/ssh-action@master
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+          KEY: ${{ secrets.KEY }}
           ARGS: "-rlgoDzvO --delete"
           SOURCE: "dist/"
           REMOTE_HOST: ${{ secrets.HOST_STAGE }}
@@ -64,7 +65,7 @@ jobs:
       - name: Hostinger Deployment
         uses: appleboy/ssh-action@master
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
+          KEY: ${{ secrets.KEY }}
           ARGS: "-rlgoDzvO --delete"
           SOURCE: "dist/"
           REMOTE_HOST: ${{ secrets.HOST_PROD }}
