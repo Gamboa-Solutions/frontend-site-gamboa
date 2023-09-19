@@ -13,6 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Test SSH Connection
+        env:
+          HOST: ${{ secrets.HOST_PROD }}
+          USER: ${{ secrets.USER_PROD }}
+          PORT: ${{ secrets.PORT_PROD }}
+        run: |
+          ssh -p "${PORT}" "${USER}@${HOST}"  "echo Connected"
+
       - name: Deploy to server
         env:
           HOST: ${{ secrets.HOST_PROD }}
@@ -21,7 +29,5 @@ jobs:
           PORT: ${{ secrets.PORT_PROD }}
           PASSWORD: ${{ secrets.PASSWORD_PROD }} # Adicione essa secret com a senha SSH no GitHub Secrets
         run: |
-          ssh $USER@$HOST -p $PORT "echo Connected"
           sudo apt-get install -y sshpass
           rsync -avz -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" --delete ./dist/ $USER@$HOST:./$TARGET_DIR
-
