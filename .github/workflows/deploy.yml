@@ -1,0 +1,41 @@
+name: Deploy to Hostinger
+
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main   # produção
+      - stage  # ambiente de stage
+      - dev    # ambiente de desenvolvimento
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    # Set environment based on the branch
+    env:
+      ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'prod' || github.ref == 'refs/heads/stage' && 'stage' || github.ref == 'refs/heads/dev' && 'dev' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy to Hostinger
+        env:
+          DEPLOY_KEY: ${{ secrets.HOSTINGER }}
+          HOST: ${{ secrets['HOST_' + env.ENVIRONMENT] }}
+          PORT: ${{ secrets['PORT_' + env.ENVIRONMENT] }}
+          USER: ${{ secrets['USER_' + env.ENVIRONMENT] }}
+          TARGET_DIR: ${{ secrets['TARGET_' + env.ENVIRONMENT] }}
+          PASSWORD: ${{ secrets['PASSWORD_' + env.ENVIRONMENT] }}
+        run: |
+          sudo apt-get install -y sshpass
+          rsync -avz -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" --delete ./dist/ $USER@$HOST:$TARGET_DIR/
+
+
