@@ -1,12 +1,9 @@
-name: Deploy Vite React App
+name: Deploy via SSH
 
 on:
   push:
     branches:
-      - main
-      - stage
-      - dev
-  workflow_dispatch:
+      - main # Ou a branch que você quer que acione o deploy
 
 jobs:
   build:
@@ -16,47 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build Vite React App
-        run: |
-          npm install
-          npm run build
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Repo Checkout
-        uses: actions/checkout@v2
-
-      - name: Hostinger Deployment
-        if: github.ref == 'refs/heads/dev'
-        uses: appleboy/ssh-action@master
-        with:
-          KEY: ${{ secrets.KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DEV }}
-          REMOTE_USER: ${{ secrets.USER_DEV }}
-          TARGET: ${{ secrets.TARGET_DEV }}
-          PORT: ${{ secrets.PORT_DEV }}
-          script: rsync -rlgoDzvO --delete dist/ $REMOTE_USER@$REMOTE_HOST:$TARGET
-
-      - name: Hostinger Deployment
-        if: github.ref == 'refs/heads/stage'
-        uses: appleboy/ssh-action@master
-        with:
-          KEY: ${{ secrets.KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_STAGE }}
-          REMOTE_USER: ${{ secrets.USER_STAGE }}
-          TARGET: ${{ secrets.TARGET_STAGE }}
-          PORT: ${{ secrets.PORT_STAGE }}
-          script: rsync -rlgoDzvO --delete dist/ $REMOTE_USER@$REMOTE_HOST:$TARGET
-
-      - name: Hostinger Deployment
-        if: github.ref == 'refs/heads/main'
-        uses: appleboy/ssh-action@master
-        with:
-          KEY: ${{ secrets.KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_PROD }}
-          REMOTE_USER: ${{ secrets.USER_PROD }}
-          TARGET: ${{ secrets.TARGET_PROD }}
+      - name: Deploy to server
+        env:
+          HOST: ${{ secrets.HOST_PROD }}
+          USER: ${{ secrets.USER_PROD }}
+          TARGET_DIR: ${{ secrets.TARGET_PROD }}
           PORT: ${{ secrets.PORT_PROD }}
-          script: rsync -rlgoDzvO --delete dist/ $REMOTE_USER@$REMOTE_HOST:$TARGET
+          PASSWORD: ${{ secrets.PASSWORD_PROD }} # Adicione essa secret com a senha SSH no GitHub Secrets
+        run: |
+          sudo apt-get install -y sshpass
+          rsync -avz -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" --delete ./dist/ $USER@$HOST:./$TARGET_DIR
+
