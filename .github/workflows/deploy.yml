@@ -21,6 +21,7 @@ jobs:
           PORT: ${{ secrets.PORT_PROD }}
           PASSWORD: ${{ secrets.PASSWORD_PROD }} # Adicione essa secret com a senha SSH no GitHub Secrets
         run: |
+          ssh $USER@$HOST -p $PORT "echo Connected"
           sudo apt-get install -y sshpass
           rsync -avz -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" --delete ./dist/ $USER@$HOST:./$TARGET_DIR
 
