@@ -41,8 +41,13 @@ jobs:
           npm run build
 
       - name: Deploy
+        env:
+          DEPLOY_KEY: ${{ secrets.HOSTINGER }}
+          HOST: ${{ secrets['HOST_' + env.ENVIRONMENT] }}
+          PORT: ${{ secrets['PORT_' + env.ENVIRONMENT] }}
+          USER: ${{ secrets['USER_' + env.ENVIRONMENT] }}
+          TARGET_DIR: ${{ secrets['TARGET_' + env.ENVIRONMENT] }}
+          PASSWORD: ${{ secrets['PASSWORD_' + env.ENVIRONMENT] }}
         run: |
           sudo apt-get install -y sshpass
           rsync -avz -e "sshpass -p $PASSWORD ssh -p ${{ env.PORT }} -o StrictHostKeyChecking=no" --delete ./dist/ ${{ env.USER }}@${{ env.HOST }}:./$TARGET_DIR
-        env:
-          PASSWORD: ${{ secrets.SOME_PASSWORD }}
