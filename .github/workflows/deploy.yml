@@ -37,7 +37,7 @@ jobs:
           REMOTE_USER: ${{ secrets.USER_DEV }}
           TARGET: ${{ secrets.TARGET_DEV }}
           PORT: ${{ secrets.PORT_DEV }}
-          script: rsync -rlgoDzvO --delete dist/ ${{ secrets.USER_DEV }}@${{ secrets.HOST_DEV }}:${{ secrets.TARGET_DEV }}
+          script: rsync -rlgoDzvO --delete dist/ $REMOTE_USER@$REMOTE_HOST:$TARGET
 
       - name: Hostinger Deployment
         if: github.ref == 'refs/heads/stage'
@@ -48,7 +48,7 @@ jobs:
           REMOTE_USER: ${{ secrets.USER_STAGE }}
           TARGET: ${{ secrets.TARGET_STAGE }}
           PORT: ${{ secrets.PORT_STAGE }}
-          script: rsync -rlgoDzvO --delete dist/ ${{ secrets.USER_STAGE }}@${{ secrets.HOST_STAGE }}:${{ secrets.TARGET_STAGE }}
+          script: rsync -rlgoDzvO --delete dist/ $REMOTE_USER@$REMOTE_HOST:$TARGET
 
       - name: Hostinger Deployment
         if: github.ref == 'refs/heads/main'
@@ -59,4 +59,4 @@ jobs:
           REMOTE_USER: ${{ secrets.USER_PROD }}
           TARGET: ${{ secrets.TARGET_PROD }}
           PORT: ${{ secrets.PORT_PROD }}
-          script: rsync -rlgoDzvO --delete dist/ ${{ secrets.USER_PROD }}@${{ secrets.HOST_PROD }}:${{ secrets.TARGET_PROD }}
+          script: rsync -rlgoDzvO --delete dist/ $REMOTE_USER@$REMOTE_HOST:$TARGET
