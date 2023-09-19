@@ -21,56 +21,42 @@ jobs:
           npm install
           npm run build
 
-  deploy-development:
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
-    needs: [build]
     steps:
       - name: Repo Checkout
         uses: actions/checkout@v2
+
       - name: Hostinger Deployment
+        if: github.ref == 'refs/heads/dev'
         uses: appleboy/ssh-action@master
         with:
           KEY: ${{ secrets.KEY }}
-
           REMOTE_HOST: ${{ secrets.HOST_DEV }}
           REMOTE_USER: ${{ secrets.USER_DEV }}
           TARGET: ${{ secrets.TARGET_DEV }}
           PORT: ${{ secrets.PORT_DEV }}
-          script: |
-            rsync -rlgoDzvO --delete dist/ ${username}@${host}:${{ secrets.TARGET_DEV }}
+          script: rsync -rlgoDzvO --delete dist/ ${{ secrets.USER_DEV }}@${{ secrets.HOST_DEV }}:${{ secrets.TARGET_DEV }}
 
-  deploy-staging:
-    runs-on: ubuntu-latest
-    needs: deploy-development
-    steps:
-      - name: Repo Checkout
-        uses: actions/checkout@v2
       - name: Hostinger Deployment
+        if: github.ref == 'refs/heads/stage'
         uses: appleboy/ssh-action@master
         with:
           KEY: ${{ secrets.KEY }}
-
           REMOTE_HOST: ${{ secrets.HOST_STAGE }}
           REMOTE_USER: ${{ secrets.USER_STAGE }}
           TARGET: ${{ secrets.TARGET_STAGE }}
           PORT: ${{ secrets.PORT_STAGE }}
-          script: |
-            rsync -rlgoDzvO --delete dist/ ${username}@${host}:${{ secrets.TARGET_STAGE }}
+          script: rsync -rlgoDzvO --delete dist/ ${{ secrets.USER_STAGE }}@${{ secrets.HOST_STAGE }}:${{ secrets.TARGET_STAGE }}
 
-  deploy-production:
-    runs-on: ubuntu-latest
-    needs: deploy-staging
-    steps:
-      - name: Repo Checkout
-        uses: actions/checkout@v2
       - name: Hostinger Deployment
+        if: github.ref == 'refs/heads/main'
         uses: appleboy/ssh-action@master
         with:
           KEY: ${{ secrets.KEY }}
-
           REMOTE_HOST: ${{ secrets.HOST_PROD }}
-          REMOTE_USER: ${{ secrets.USER_PROD }}  # fixed missing closing }}
+          REMOTE_USER: ${{ secrets.USER_PROD }}
           TARGET: ${{ secrets.TARGET_PROD }}
           PORT: ${{ secrets.PORT_PROD }}
-          script: |
-            rsync -rlgoDzvO --delete dist/ ${username}@${host}:${{ secrets.TARGET_PROD }}
+          script: rsync -rlgoDzvO --delete dist/ ${{ secrets.USER_PROD }}@${{ secrets.HOST_PROD }}:${{ secrets.TARGET_PROD }}
