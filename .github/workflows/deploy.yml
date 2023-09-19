@@ -27,4 +27,5 @@ jobs:
         run: |
           sudo apt-get install -y sshpass
           sudo apt-get install -y rsync
+          ssh -p $PORT $USERNAME@$HOST ls
           rsync -avz --delete -e "sshpass -p $PASSWORD ssh -p $PORT -o StrictHostKeyChecking=no" ./dist/ $USERNAME@$HOST:/path/to/your/public_html/
