@@ -43,11 +43,11 @@ jobs:
       - name: Deploy
         env:
           DEPLOY_KEY: ${{ secrets.HOSTINGER }}
-          HOST: ${{ env.HOST }}
-          PORT: ${{ env.PORT }}
-          USER: ${{ env.USER }}
-          TARGET_DIR: ${{ env.TARGET_DIR }}
-          PASSWORD: ${{ env.PASSWORD }}
+          HOST: ${{ secrets.HOST_PROD }}
+          PORT: ${{ secrets.PORT_PROD }}
+          USER: ${{ secrets.USER_PROD }}
+          TARGET_DIR: ${{ secrets.TARGET_PROD }}
+          PASSWORD: ${{ secrets.PASSWORD_PROD }}
         run: |
           sudo apt-get install -y sshpass
           rsync -avz -e "sshpass -p $PASSWORD ssh -p ${{ env.PORT }} -o StrictHostKeyChecking=no" --delete ./dist/ ${{ env.USER }}@${{ env.HOST }}:./$TARGET_DIR
