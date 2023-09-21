@@ -16,8 +16,12 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
+          echo "Username: $SSH_USERNAME"
+          echo "Host: $SSH_HOST"
+
           echo "$SSH_PRIVATE_KEY" > deploy_key
           chmod 600 deploy_key
-          ssh -o StrictHostKeyChecking=no -i deploy_key $SSH_USERNAME@$SSH_HOST "ls -al"
+          ssh -o StrictHostKeyChecking=no -i $SSH_PORT deploy_key $SSH_USERNAME@$SSH_HOST "ls -al"
           rm -f deploy_key
