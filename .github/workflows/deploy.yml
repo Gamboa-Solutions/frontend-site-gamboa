@@ -13,11 +13,11 @@ jobs:
 
       - name: SSH and List Directories
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.KEY }}
-          SSH_HOST: ${{ secrets.HOST }}
-          SSH_USERNAME: ${{ secrets.USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
         run: |
-          echo "$KEY" > deploy_key
+          echo "$SSH_PRIVATE_KEY" > deploy_key
           chmod 600 deploy_key
-          ssh -o StrictHostKeyChecking=no -i deploy_key $USER@$HOST "ls -al"
+          ssh -o StrictHostKeyChecking=no -i deploy_key $SSH_USERNAME@$SSH_HOST "ls -al"
           rm -f deploy_key
