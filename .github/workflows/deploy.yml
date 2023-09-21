@@ -11,6 +11,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Display SSH Details
+        run: |
+          echo "Username: $SSH_USERNAME"
+          echo "Host: $SSH_HOST"
+          echo "Port: $SSH_PORT"
+
       - name: SSH and List Directories
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -18,10 +24,7 @@ jobs:
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
-          echo "Username: $SSH_USERNAME"
-          echo "Host: $SSH_HOST"
-
           echo "$SSH_PRIVATE_KEY" > deploy_key
           chmod 600 deploy_key
-          ssh -o StrictHostKeyChecking=no -i $SSH_PORT deploy_key $SSH_USERNAME@$SSH_HOST "ls -al"
+          ssh -o StrictHostKeyChecking=no -p $SSH_PORT -i deploy_key $SSH_USERNAME@$SSH_HOST "ls -al"
           rm -f deploy_key
