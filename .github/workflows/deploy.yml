@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Connect via SSH
         run: |
+          echo "${{ secrets.TESTE }}" > deploy_key
+          chmod 600 deploy_key
           ssh -o StrictHostKeyChecking=no -p 65002 -i deploy_key u792725624@62.72.62.10 "ls -al"
           rm -f deploy_key
         shell: /usr/bin/bash -e {0}
