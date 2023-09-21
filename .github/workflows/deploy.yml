@@ -15,7 +15,7 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
           chmod 600 deploy_key
-          echo "::add-mask::${{ secrets.SSH_USERNAME }}"
-          echo "::add-mask::${{ secrets.SSH_HOST }}"
-          ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} -i deploy_key ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "ls -al"
+          sudo apt-get install -y sshpass
+          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} -i deploy_key ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "ls -al"
           rm -f deploy_key
+
