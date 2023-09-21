@@ -10,10 +10,10 @@ jobs:
     steps:
       - name: Connect via SSH
         run: |
-          echo "***" > deploy_key
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
           chmod 600 deploy_key
           sudo apt-get install -y sshpass
-          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} -i deploy_key ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "ls -al"
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -p 65002 -i deploy_key u792725624@62.72.62.10 "ls -al"
           rm -f deploy_key
         shell: /usr/bin/bash -e {0}
 
