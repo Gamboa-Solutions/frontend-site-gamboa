@@ -8,11 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Connect via SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
+          echo SSH_PRIVATE_KEY > deploy_key
           chmod 600 deploy_key
           sudo apt-get install -y sshpass
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -vvv -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} -i deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "ls -al"
+          sshpass -p SSH_PASSWORD ssh -vvv -o StrictHostKeyChecking=no -p SSH_PORT -i deploy_key SSH_USERNAME@$SSH_HOST "ls -al"
           rm -f deploy_key
         shell: bash
 
