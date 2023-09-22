@@ -1,20 +1,41 @@
-name: SSH and List Directories
+name: Build and Deploy
 
 on:
   push:
 
 jobs:
-  your-job-name:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Connect via SSH and replace files
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14 # ou qualquer versão que você deseja usar
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install -g ionic
+
+      - name: Build the Ionic app
+        run: |
+          ionic build --prod
+
+      - name: Connect via SSH and deploy
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
           chmod 600 deploy_key
-          sudo apt-get install -y sshpass
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -o StrictHostKeyChecking=no -P ${{ secrets.SSH_PORT }} -i deploy_key -r ./www/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/gamboasolutions.com.br/public_html/
-          rm -f deploy_key
+          sudo apt-get install -y sshpass rsync
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -rlgoDzvc --delete -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} -i deploy_key" ./www/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET_DIR }}"
+          rm -rf deploy_key
         shell: bash
+
+
+
+
 
 
 
