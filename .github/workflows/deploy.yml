@@ -24,6 +24,20 @@ jobs:
         run: |
           ionic build --prod
 
+      - name: Create .htaccess
+        run: |
+          cat <<EOT > ./www/.htaccess
+          <IfModule mod_rewrite.c>
+          RewriteEngine On
+          RewriteBase /subdirectory
+          RewriteRule ^index\.html$ - [L]
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteCond %{REQUEST_FILENAME} !-l
+          RewriteRule . /index.html [L]
+          </IfModule>
+          EOT
+
       - name: Connect via SSH and deploy
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
@@ -32,13 +46,3 @@ jobs:
           sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -rlgoDzvc -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} -i deploy_key" ./www/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET_DIR }}"
           rm -rf deploy_key
         shell: bash
-
-
-
-
-
-
-
-
-
-
