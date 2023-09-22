@@ -7,14 +7,15 @@ jobs:
   your-job-name:
     runs-on: ubuntu-latest
     steps:
-      - name: Connect via SSH
+      - name: Connect via SSH and replace files
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
           chmod 600 deploy_key
           sudo apt-get install -y sshpass
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} -i deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "ls -al"
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -o StrictHostKeyChecking=no -P ${{ secrets.SSH_PORT }} -i deploy_key -r ./www/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/gamboasolutions.com.br/public_html/
           rm -f deploy_key
         shell: bash
+
 
 
 
