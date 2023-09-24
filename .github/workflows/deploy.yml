@@ -2,6 +2,10 @@ name: Build and Deploy
 
 on:
   push:
+    branches:
+      - main
+      - stage
+      - dev
 
 jobs:
   build-and-deploy:
@@ -38,11 +42,32 @@ jobs:
           </IfModule>
           EOT
 
-      - name: Connect via SSH and deploy
+      - name: Connect via SSH and deploy to PROD
+        if: github.ref == 'refs/heads/main'
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
           chmod 600 deploy_key
           sudo apt-get install -y sshpass rsync
           sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -rlgoDzvc -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} -i deploy_key" ./www/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET_DIR }}"
+          rm -rf deploy_key
+        shell: bash
+
+      - name: Connect via SSH and deploy to STAGE
+        if: github.ref == 'refs/heads/stage'
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
+          chmod 600 deploy_key
+          sudo apt-get install -y sshpass rsync
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -rlgoDzvc -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} -i deploy_key" ./www/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET_DIR }}/stage"
+          rm -rf deploy_key
+        shell: bash
+
+      - name: Connect via SSH and deploy to DEV
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
+          chmod 600 deploy_key
+          sudo apt-get install -y sshpass rsync
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -rlgoDzvc -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} -i deploy_key" ./www/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET_DIR }}/dev"
           rm -rf deploy_key
         shell: bash
