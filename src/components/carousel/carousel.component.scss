@@ -1,0 +1,27 @@
+swiper-container {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  /* Para evitar que as imagens extrapolem o contêiner */
+  gap: 10px;
+  /* Espaçamento entre as imagens (ajuste conforme necessário) */
+  align-items: center;
+  /* Alinha as imagens verticalmente no centro */
+  --swiper-pagination-bullet-active-color: #fff;
+  --swiper-pagination-color: #fff;
+}
+
+swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+img {
+  width: 32rem;
+  height: 32rem;
+  aspect-ratio: 16/9;
+  /* Mantém a proporção da imagem */
+  object-fit: cover;
+  /* Mantém a proporção da imagem e preenche o espaço disponível */
+}

@@ -1,0 +1,8 @@
+<swiper-container #swiper (afterinit)="swiperReady()" (slidechange)="swiperSlideChanged($event)" [loop]="true"
+  [pagination]="true" [zoom]="true" [pagination]="true" [zoom]="true">
+  <swiper-slide *ngFor="let image of images">
+    <div class="swiper-zoom-container">
+      <img [src]="image" alt="Imagem do Carrossel" />
+    </div>
+  </swiper-slide>
+</swiper-container>

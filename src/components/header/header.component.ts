@@ -7,13 +7,5 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  TITULO!: string;
   @Input() pageTitle!: string;
-  constructor(private translate: TranslateService) {}
-
-  translateTitle() {
-    this.translate.get(this.TITULO).subscribe((res: string) => {
-      console.log(res);
-    });
-  }
 }
