@@ -15,7 +15,12 @@ import { HeaderComponent } from '../components/header/header.component';
 import { ProjetosComponent } from './projetos/projetos.component';
 import { CardComponent } from '../components/card/card.component';
 import { CarouselComponent } from '../components/carousel/carousel.component';
+import { CarouselCardsComponent } from '../components/carousel-cards/carousel-cards.component';
+import { ContactFormComponent } from '../components/contact-form/contact-form.component';
+import { CarouselTextComponent } from '../components/carousel-text/carousel-text.component';
+import { FooterComponent } from '../components/footer/footer.component';
 import { ThumbnailComponent } from '../components/thumbnail/thumbnail.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -25,6 +30,10 @@ export function createTranslateLoader(http: HttpClient) {
     AppComponent,
     CardComponent,
     CarouselComponent,
+    CarouselCardsComponent,
+    ContactFormComponent,
+    CarouselTextComponent,
+    FooterComponent,
     HeaderComponent,
     ProjetosComponent,
     ThumbnailComponent,
@@ -42,6 +51,7 @@ export function createTranslateLoader(http: HttpClient) {
       },
     }),
     AppRoutingModule,
+    ReactiveFormsModule,
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

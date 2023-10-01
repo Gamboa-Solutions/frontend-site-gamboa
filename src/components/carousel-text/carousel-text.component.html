@@ -1,0 +1,17 @@
+<swiper-container #swiper (afterInit)="swiperReady()" (slideChange)="swiperSlideChanged($event)" [loop]="true"
+  [pagination]="true">
+  <swiper-slide *ngFor="let text of textBlocks">
+    <div class="text-block">
+      <p>
+        <ion-text color="primary">
+          {{ text.title }}
+        </ion-text>
+      </p>
+      <ion-text color="primary">
+        <h4>
+          {{ text.subtitle }}
+        </h4>
+      </ion-text>
+    </div>
+  </swiper-slide>
+</swiper-container>

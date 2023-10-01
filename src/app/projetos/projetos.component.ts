@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -6,7 +7,9 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './projetos.component.html',
   styleUrls: ['./projetos.component.scss'],
 })
-export class ProjetosComponent {
+export class ProjetosComponent implements OnInit {
+  contactForm!: FormGroup;
+  pageFooter!: string;
   pageTitle!: string;
   title!: string;
   content!: string;
@@ -20,6 +23,24 @@ export class ProjetosComponent {
     'https://i.gifer.com/LrMw.gif',
     'https://i.gifer.com/4RNm.gif',
     'https://i.gifer.com/7sFa.gif',
+  ];
+
+  slideOpts = {
+    slidesPerView: 1.5,
+    spaceBetween: 10,
+    centeredSlides: true,
+  };
+
+  cards = [
+    { title: 'Card 1', content: 'Conteúdo do Card 1' },
+    { title: 'Card 2', content: 'Conteúdo do Card 2' },
+    { title: 'Card 3', content: 'Conteúdo do Card 3' },
+  ];
+
+  textBlocks = [
+    { title: 'Texto do Bloco 1', subtitle: 'Subtítulo do Bloco 1' },
+    { title: 'Texto do Bloco 1', subtitle: 'Subtítulo do Bloco 1' },
+    { title: 'Texto do Bloco 1', subtitle: 'Subtítulo do Bloco 1' },
   ];
 
   constructor(private translate: TranslateService) {
@@ -38,5 +59,11 @@ export class ProjetosComponent {
     this.translate.get('label').subscribe((translation: string) => {
       this.label = translation;
     });
+
+    this.translate.get('RODAPE').subscribe((translation: string) => {
+      this.pageFooter = translation;
+    });
   }
+
+  ngOnInit() {}
 }

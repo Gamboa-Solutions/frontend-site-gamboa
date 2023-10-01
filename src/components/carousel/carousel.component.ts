@@ -1,6 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Swiper } from 'swiper';
-import { SwiperOptions } from 'swiper/types';
 
 @Component({
   selector: 'app-carousel',
@@ -17,7 +16,5 @@ export class CarouselComponent {
     this.swiper = this.swiperRef?.nativeElement.swiper;
   }
 
-  swiperSlideChanged(event: any) {
-    console.log('Swiper slide changed', event);
-  }
+  swiperSlideChanged(event: any) {}
 }

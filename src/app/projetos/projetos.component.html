@@ -20,5 +20,25 @@
         <app-card [title]="title" [content]="content"></app-card>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <app-carousel-text [textBlocks]="textBlocks"></app-carousel-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <app-carousel-cards [slideOpts]="slideOpts" [cards]="cards"></app-carousel-cards>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <app-contact-form></app-contact-form>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <app-footer [pageFooter]="pageFooter"></app-footer>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 </ion-content>

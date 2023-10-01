@@ -1,14 +1,32 @@
-app-header{
-  text-align: center;
-}
+ion-grid {
+  padding: 0px;
 
-app-thumbnail{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+  ion-row {
+    padding: 0px;
 
-app-card {
-  text-align: center ;
+    ion-col {
+      padding: 0px;
+
+      app-header {
+        text-align: center;
+      }
+
+      app-thumbnail {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #f5f5f5;
+        color: #000;
+      }
+
+      app-card {
+        text-align: center;
+      }
+
+      app-footer {
+        text-align: center;
+      }
+    }
+  }
 }

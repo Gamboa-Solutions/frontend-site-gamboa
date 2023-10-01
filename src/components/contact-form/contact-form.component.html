@@ -1,0 +1,26 @@
+<form (ngSubmit)="submitForm()" [formGroup]="contactForm">
+  <ion-item>
+    <ion-label position="floating">Nome</ion-label>
+    <ion-input formControlName="name" required></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">E-mail</ion-label>
+    <ion-input formControlName="email" type="email" required></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-select formControlName="questionType" label="perguntas" label-placement="floating">
+      <ion-select-option value="dúvida">Dúvida</ion-select-option>
+      <ion-select-option value="sugestão">Sugestão</ion-select-option>
+      <ion-select-option value="problema">Problema</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Mensagem</ion-label>
+    <ion-textarea formControlName="message" rows="4" required></ion-textarea>
+  </ion-item>
+
+  <ion-button expand="full" type="submit">Enviar</ion-button>
+</form>
