@@ -29,6 +29,7 @@
     "@ionic/angular": "^7.0.0",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
+    "acorn": "^8.0.1",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
     "swiper": "^10.3.1",
