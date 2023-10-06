@@ -10,7 +10,8 @@
   </ion-item>
 
   <ion-item>
-    <ion-select formControlName="questionType" label="perguntas" label-placement="floating">
+    <ion-select formControlName="questionType" label="perguntas" label-placement="floating" [multiple]="true"
+      mode="ios">
       <ion-select-option value="dúvida">Dúvida</ion-select-option>
       <ion-select-option value="sugestão">Sugestão</ion-select-option>
       <ion-select-option value="problema">Problema</ion-select-option>

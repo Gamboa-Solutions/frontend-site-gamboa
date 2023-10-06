@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -8,6 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./projetos.component.scss'],
 })
 export class ProjetosComponent implements OnInit {
+  @ViewChild('myCanvas', { static: false }) myCanvas: any;
   contactForm!: FormGroup;
   pageFooter!: string;
   pageTitle!: string;
@@ -66,4 +67,22 @@ export class ProjetosComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  ngAfterViewInit() {
+    const canvas: HTMLCanvasElement = this.myCanvas?.nativeElement; // Verificação de nulidade com "?"
+
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+
+      if (ctx) {
+        // Desenha um retângulo vermelho no canvas
+        ctx.fillStyle = 'red';
+        ctx.fillRect(50, 50, 200, 200);
+      } else {
+        console.error('getContext retornou null');
+      }
+    } else {
+      console.error('Canvas não encontrado');
+    }
+  }
 }
