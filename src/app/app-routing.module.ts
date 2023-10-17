@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { ProjetosComponent } from './projetos/projetos.component';
+import { ProjetosComponent } from './pages/projetos/projetos.page';
 
 const routes: Routes = [
   {

@@ -12,8 +12,9 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from '../components/header/header.component';
-import { ProjetosComponent } from './projetos/projetos.component';
+import { ProjetosComponent } from './pages/projetos/projetos.page';
 import { CardComponent } from '../components/card/card.component';
+import { CanvasComponent } from '../components/canvas/canvas.component';
 import { CarouselComponent } from '../components/carousel/carousel.component';
 import { CarouselCardsComponent } from '../components/carousel-cards/carousel-cards.component';
 import { ContactFormComponent } from '../components/contact-form/contact-form.component';
@@ -29,6 +30,7 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [
     AppComponent,
     CardComponent,
+    CanvasComponent,
     CarouselComponent,
     CarouselCardsComponent,
     ContactFormComponent,
