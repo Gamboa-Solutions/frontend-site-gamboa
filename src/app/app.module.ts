@@ -1,61 +1,40 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
-
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RouterModule } from '@angular/router';
+import { AppRoutingModule } from './app.routing';
 
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { HeaderComponent } from '../components/header/header.component';
-import { ProjetosComponent } from './pages/projetos/projetos.page';
-import { CardComponent } from '../components/card/card.component';
-import { CanvasComponent } from '../components/canvas/canvas.component';
-import { CarouselComponent } from '../components/carousel/carousel.component';
-import { CarouselCardsComponent } from '../components/carousel-cards/carousel-cards.component';
-import { ContactFormComponent } from '../components/contact-form/contact-form.component';
-import { CarouselTextComponent } from '../components/carousel-text/carousel-text.component';
-import { FooterComponent } from '../components/footer/footer.component';
-import { ThumbnailComponent } from '../components/thumbnail/thumbnail.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { SignupComponent } from './signup/signup.component';
+import { LandingComponent } from './landing/landing.component';
+import { ProfileComponent } from './profile/profile.component';
+import { HomeComponent } from './home/home.component';
+import { NavbarComponent } from './shared/navbar/navbar.component';
+import { FooterComponent } from './shared/footer/footer.component';
 
-export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+import { HomeModule } from './home/home.module';
+import { LoginComponent } from './login/login.component';
+
 @NgModule({
   declarations: [
     AppComponent,
-    CardComponent,
-    CanvasComponent,
-    CarouselComponent,
-    CarouselCardsComponent,
-    ContactFormComponent,
-    CarouselTextComponent,
+    SignupComponent,
+    LandingComponent,
+    ProfileComponent,
+    NavbarComponent,
     FooterComponent,
-    HeaderComponent,
-    ProjetosComponent,
-    ThumbnailComponent,
+    LoginComponent
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
-    HttpClientModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient],
-      },
-    }),
+    NgbModule,
+    FormsModule,
+    RouterModule,
     AppRoutingModule,
-    ReactiveFormsModule,
+    HomeModule
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
-  bootstrap: [AppComponent],
+  providers: [],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
