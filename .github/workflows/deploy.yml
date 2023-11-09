@@ -22,8 +22,8 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - name: Add pnpm to PATH
-        run: echo "$(npm bin -g)" >> $GITHUB_PATH
+      - name: Setup pnpm
+        run: pnpm setup
 
       - name: Install Angular CLI
         run: pnpm add -g @angular/cli
