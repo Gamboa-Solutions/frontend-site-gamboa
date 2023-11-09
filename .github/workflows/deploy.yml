@@ -17,30 +17,32 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 18.17.1
+          node-version: 18.18.0
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: |
-          npm ci
-          npm install -g ionic
+          npm install -g pnpm
+          pnpm install
 
-      - name: Build the Ionic app
+      - name: Build the Angular app
         run: |
-          ionic build --prod
+          ng build --configuration production
 
       - name: Create .htaccess
         run: |
-          cat <<EOT > ./www/.htaccess
-          <IfModule mod_rewrite.c>
-          RewriteEngine On
-          RewriteBase /subdirectory
-          RewriteRule ^index\.html$ - [L]
-          RewriteCond %{REQUEST_FILENAME} !-f
-          RewriteCond %{REQUEST_FILENAME} !-d
-          RewriteCond %{REQUEST_FILENAME} !-l
-          RewriteRule . /index.html [L]
-          </IfModule>
-          EOT
+            mkdir -p dist/argon-design-system-angular
+            cat <<EOT > dist/argon-design-system-angular/.htaccess
+            <IfModule mod_rewrite.c>
+            RewriteEngine On
+            RewriteBase /subdirectory
+            RewriteRule ^index\.html$ - [L]
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteCond %{REQUEST_FILENAME} !-l
+            RewriteRule . /index.html [L]
+            </IfModule>
+            EOT
 
       - name: Connect via SSH and deploy to PROD
         if: github.ref == 'refs/heads/main'
@@ -61,7 +63,6 @@ jobs:
           sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -rlgoDzvc -e "ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} -i deploy_key" ./www/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET_DIR }}/stage"
           rm -rf deploy_key
         shell: bash
-
       - name: Connect via SSH and deploy to DEV
         if: github.ref == 'refs/heads/dev'
         run: |
