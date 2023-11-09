@@ -20,10 +20,11 @@ jobs:
           node-version: 18.18.0
           cache: 'pnpm'
 
+      - name: Install pnpm
+        run: npm install -g pnpm
+  
       - name: Install dependencies
-        run: |
-          npm install -g pnpm
-          pnpm install
+        run: pnpm install
 
       - name: Build the Angular app
         run: |
