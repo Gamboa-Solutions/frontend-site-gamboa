@@ -19,9 +19,14 @@ jobs:
         with:
           node-version: 18.18.0
 
-
       - name: Install pnpm
         run: npm install -g pnpm
+
+      - name: Add pnpm to PATH
+        run: echo "$(npm bin -g)" >> $GITHUB_PATH
+
+      - name: Install Angular CLI
+        run: pnpm add -g @angular/cli
 
       - name: Install dependencies
         run: pnpm install
