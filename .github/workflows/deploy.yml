@@ -23,7 +23,10 @@ jobs:
         run: npm install -g pnpm
 
       - name: Setup pnpm
-        run: pnpm setup
+        run: |
+          export SHELL=/bin/bash
+          pnpm setup
+        shell: bash
 
       - name: Install Angular CLI
         run: pnpm add -g @angular/cli
