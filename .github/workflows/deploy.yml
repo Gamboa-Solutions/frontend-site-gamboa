@@ -21,22 +21,14 @@ jobs:
 
       - name: Install pnpm
         run: npm install -g pnpm
-
-      - name: Setup pnpm
+  
+      - name: Install dependencies and Angular CLI
         run: |
-          export SHELL=/bin/bash
-          pnpm setup
-        shell: bash
-
-      - name: Install Angular CLI
-        run: pnpm add -g @angular/cli
-
-      - name: Install dependencies
-        run: pnpm install
-
+            pnpm install
+            pnpm add @angular/cli
+  
       - name: Build the Angular app
-        run: |
-          ng build --configuration production
+        run: npx ng build --configuration production
 
       - name: Create .htaccess
         run: |
