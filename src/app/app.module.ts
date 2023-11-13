@@ -14,6 +14,7 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { HomeModule } from './home/home.module';
 import { LoginComponent } from './login/login.component';
 import { CommonModule } from '@angular/common';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -26,13 +27,13 @@ import { CommonModule } from '@angular/common';
     LoginComponent
   ],
   imports: [
-    CommonModule,
     BrowserModule,
-    NgModule,
     FormsModule,
     RouterModule,
     AppRoutingModule,
-    HomeModule
+    HomeModule,
+    NgbModule,
+    CommonModule // This is correctly placed
   ],
   providers: [],
   bootstrap: [AppComponent]
